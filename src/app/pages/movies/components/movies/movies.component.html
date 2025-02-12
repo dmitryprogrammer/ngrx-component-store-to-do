@@ -1,0 +1,6 @@
+<p>movies works!</p>
+<ul>
+  @for(movie of (movies$ | async); track movie.id) {
+  <li>{{ movie?.title }}</li>
+  }
+</ul>
