@@ -24,4 +24,12 @@ export class MoviesStore extends ComponentStore<IMoviesStore> {
   readonly movies$: Observable<Movie[]> = this.select(
     ({ movies }: IMoviesStore) => movies
   );
+
+  readonly latestMovieId$: Observable<number> = this.select(
+    ({ movies }: IMoviesStore) => movies.at(-1)?.id ?? 0
+  );
+
+  readonly addMovie = this.updater((state: IMoviesStore, movie: Movie) => ({
+    movies: [...state.movies, movie],
+  }));
 }
