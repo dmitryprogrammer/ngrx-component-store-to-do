@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import {
   AbstractControl,
   FormControl,
@@ -7,7 +7,8 @@ import {
   Validators,
 } from '@angular/forms';
 import { MoviesStore } from '../../store/movies.store';
-import { lastValueFrom } from 'rxjs';
+import { lastValueFrom, takeUntil } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-add-movie',
@@ -28,10 +29,19 @@ export class AddMovieComponent implements OnInit {
     return this.addMovieForm?.get('movieName');
   }
 
-  constructor(private readonly moviesStore: MoviesStore) {}
+  constructor(
+    private readonly moviesStore: MoviesStore,
+    private destroyRef: DestroyRef
+  ) {
+    this.destroyRef = inject(DestroyRef);
+  }
 
-  async ngOnInit(): Promise<void> {
-    this.latestMovieId = await lastValueFrom(this.moviesStore?.latestMovieId$);
+  ngOnInit(): void {
+    this.moviesStore?.latestMovieId$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((latestMovieId) => {
+        this.latestMovieId = latestMovieId;
+      });
   }
 
   public addMovie(): void {
