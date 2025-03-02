@@ -18,14 +18,14 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   providers: [MoviesStore],
 })
 export class AddMovieComponent implements OnInit {
-  private latestMovieId: number;
+  public latestMovieId: number;
   public addMovieForm = new FormGroup<{
     movieName: FormControl<string>;
   }>({
     movieName: new FormControl('', Validators.required),
   });
 
-  private get movieNameControl(): AbstractControl<string> {
+  public get movieNameControl(): AbstractControl<string> {
     return this.addMovieForm?.get('movieName');
   }
 
