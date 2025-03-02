@@ -1,6 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { MoviesStore } from './movies-store';
-import { Movie } from './movie';
+import { Movie, MoviesStore } from './movies.store';
 
 describe('MoviesStore', () => {
   let moviesStore: MoviesStore;
